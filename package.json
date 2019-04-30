@@ -1,0 +1,37 @@
+{
+  "name": "gatsby-greenhouse-starter",
+  "description": "Gatsby + Greenhouse Starter",
+  "version": "1.0.0",
+  "author": "Kevin Barnett <kevinbarnett@gmail.com>",
+  "dependencies": {
+    "gatsby": "^2.0.19",
+    "gatsby-cli": "^2.4.8",
+    "gatsby-plugin-manifest": "^2.0.5",
+    "gatsby-plugin-offline": "^2.0.5",
+    "gatsby-plugin-react-helmet": "^3.0.0",
+    "gatsby-source-filesystem": "^2.0.10",
+    "gatsby-source-greenhouse-job-board": "^1.0.3",
+    "react": "^16.5.1",
+    "react-dom": "^16.5.1",
+    "react-helmet": "^5.2.0",
+    "react-html-parser": "^2.0.2",
+    "slugify": "^1.3.3"
+  },
+  "keywords": [
+    "gatsby"
+  ],
+  "license": "MIT",
+  "scripts": {
+    "build": "gatsby build",
+    "develop": "gatsby develop",
+    "format": "prettier --write '**/*.js'",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "prettier": "^1.14.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kevinbarnett/gatsby-greenhouse-starter"
+  }
+}
