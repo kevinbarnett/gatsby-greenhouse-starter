@@ -1,7 +1,7 @@
 {
   "name": "gatsby-greenhouse-starter",
   "description": "Gatsby + Greenhouse Starter",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "Kevin Barnett <kevinbarnett@gmail.com>",
   "dependencies": {
     "gatsby": "^2.24.52",
