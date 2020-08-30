@@ -79,14 +79,6 @@ export const query = graphql`
     greenhouseJob(id: { eq: $id }) {
       title
       content
-      location_questions {
-        label
-        required
-        fields {
-          name
-          type
-        }
-      }
       questions {
         description
         label
