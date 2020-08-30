@@ -14,8 +14,9 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
   const slugString = node.title || node.name
   const slugOptions = {
     replacement: '-',
-    remove: RegExp(/[*+~.()'"!:@]/g),
-    lower: true
+    remove: RegExp(/[*+~.()'"!?:@]/g),
+    lower: true,
+    strict: true
   }
 
   if (slugString) {
