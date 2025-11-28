@@ -3,7 +3,7 @@ import { graphql } from "gatsby"
 import Layout from "../components/layout"
 import getJobPostPathname from "../helpers/getJobPostPathname"
 
-export default ({data}) => {
+const DepartmentPage = ({ data }) => {
   const department = data.greenhouseDepartment
   const hasJobs = Boolean(department.jobs && department.jobs.length)
 
@@ -11,16 +11,17 @@ export default ({data}) => {
     <Layout>
       <h1>{department.name}</h1>
       <ul>
-      {console.log(department)}
-      {hasJobs && department.jobs.map(job =>
-        <li key={job.id} className='job'>
-          <a href={getJobPostPathname(job)}>{job.title}</a> ({job.location.name})
-        </li>
-      )}
+        {hasJobs && department.jobs.map(job =>
+          <li key={job.id} className='job'>
+            <a href={getJobPostPathname(job)}>{job.title}</a> ({job.location.name})
+          </li>
+        )}
       </ul>
     </Layout>
   )
 }
+
+export default DepartmentPage
 
 export const query = graphql`
   query DepartmentPageQuery($id: String!) {

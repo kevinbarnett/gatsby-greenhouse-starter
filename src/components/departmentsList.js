@@ -1,5 +1,6 @@
 import React from 'react'
-import { StaticQuery, graphql } from 'gatsby'
+import { useStaticQuery, graphql } from 'gatsby'
+import "../components/queryFragments"
 
 // filter:{jobs:{elemMatch:{id:{ne:0}}}}
 
@@ -33,28 +34,27 @@ const DepartmentsListing = ({node: department}) => {
 
 
 
-const DepartmentsList = () => (
-  <StaticQuery
-    query={graphql`
-      query {
-        allGreenhouseDepartment {
-          edges {
-            node {
-              name,
-              jobs {
-                ...JobQueryFragment
-              }
+const DepartmentsList = () => {
+  const data = useStaticQuery(graphql`
+    query {
+      allGreenhouseDepartment {
+        edges {
+          node {
+            name,
+            jobs {
+              ...JobQueryFragment
             }
           }
         }
       }
-    `}
-    render={data => (
-          <ul className='departments-list'>
-            {data.allGreenhouseDepartment.edges.map((edge) => <DepartmentsListing node={edge.node} />)}
-          </ul>
-    )}
-  />
-)
+    }
+  `)
+
+  return (
+    <ul className='departments-list'>
+      {data.allGreenhouseDepartment.edges.map((edge) => <DepartmentsListing key={edge.node.name} node={edge.node} />)}
+    </ul>
+  )
+}
 
 export default DepartmentsList

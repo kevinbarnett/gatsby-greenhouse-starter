@@ -3,7 +3,7 @@ import { graphql } from "gatsby"
 import Layout from "../components/layout"
 import getJobPostPathname from "../helpers/getJobPostPathname"
 
-export default ({data}) => {
+const OfficePage = ({data}) => {
   const office = data.greenhouseOffice
   const hasJobs = Boolean(office.jobs && office.jobs.length)
 
@@ -21,6 +21,8 @@ export default ({data}) => {
     </Layout>
   )
 }
+
+export default OfficePage
 
 export const query = graphql`
   query OfficePageQuery($id: String!) {

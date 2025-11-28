@@ -1,5 +1,5 @@
 import React from "react"
-import ReactHtmlParser from 'react-html-parser'
+import parse from 'html-react-parser'
 
 const Form = (job) => {
   const jobQuestions = job.questions
@@ -41,7 +41,7 @@ const FieldLayout = ({question}) => {
         }
       </label>
       {Boolean(question.description) &&
-        <div className='description'>{ReactHtmlParser(question.description)}</div>
+        <div className='description'>{parse(question.description)}</div>
       }
       {question.fields.map((field, index) =>
         <FormField key={index.toString()} field={field} requiredString={question.required} />
@@ -89,7 +89,7 @@ const FieldInputFile = ({name, required}) => {
   return (
     <div className="file-upload-layout">
       <input type="file" id={name} name={name} required={required} accept=".doc,.docx,.pdf,.rtf,.txt" />
-      <div class="file-upload-message">File can be .doc(x), .pdf, .rtf, or .txt.</div>
+      <div className="file-upload-message">File can be .doc(x), .pdf, .rtf, or .txt.</div>
     </div>
   )
 }

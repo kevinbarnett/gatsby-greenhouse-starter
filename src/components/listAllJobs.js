@@ -1,6 +1,7 @@
 import React from 'react'
-import { StaticQuery, graphql } from 'gatsby'
+import { useStaticQuery, graphql } from 'gatsby'
 import getJobPostPathname from "../helpers/getJobPostPathname"
+import "../components/queryFragments"
 
 const JobListing = ({jobNode, departmentNode, officeNode}) => {
   const href = getJobPostPathname(jobNode)
@@ -59,44 +60,61 @@ const OfficeListing = ({officeNode}) => {
   )
 }
 
-const AllJobsList = () => (
-  <StaticQuery
-    query={graphql`
-      query {
-        allGreenhouseOffice {
-          edges {
-            node {
-              name
+const AllJobsList = () => {
+  const data = useStaticQuery(graphql`
+    query {
+      allGreenhouseOffice {
+        edges {
+          node {
+            name
+            id
+            fields {
+              slug
+            }
+            jobs {
               id
+            }
+            departments {
+              id
+              name
               fields {
                 slug
               }
               jobs {
-                id
-              }
-              departments {
-                id
-                name
-                fields {
-                  slug
-                }
-                jobs {
-                  ...JobQueryFragment
-                }
+                ...JobQueryFragment
               }
             }
           }
         }
       }
-    `}
-    render={data => (
+    }
+  `)
+
+  if (!data || !data.allGreenhouseOffice) {
+    return (
       <div className='all-jobs-list'>
-        {data.allGreenhouseOffice.edges.map(({node}) => 
-          <OfficeListing key={node.id} officeNode={node} />
-        )}
+        <p>Error: Unable to load job data. Please check your Greenhouse API configuration.</p>
+        <p style={{ fontSize: '0.8em', color: '#666' }}>Debug: data.allGreenhouseOffice is {data?.allGreenhouseOffice ? 'defined' : 'undefined'}</p>
       </div>
-    )}
-  />
-)
+    )
+  }
+
+  if (!data.allGreenhouseOffice.edges || data.allGreenhouseOffice.edges.length === 0) {
+    return (
+      <div className='all-jobs-list'>
+        <p>No job openings available at this time.</p>
+        <p style={{ fontSize: '0.8em', color: '#666' }}>This might mean the Greenhouse API isn't configured with a valid boardToken.</p>
+      </div>
+    )
+  }
+
+  return (
+    <div className='all-jobs-list'>
+      {data.allGreenhouseOffice.edges.map(({node}) => 
+        <OfficeListing key={node.id} officeNode={node} />
+      )}
+    </div>
+  )
+}
 
 export default AllJobsList

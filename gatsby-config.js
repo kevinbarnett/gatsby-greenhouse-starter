@@ -25,7 +25,7 @@ module.exports = {
     {
       resolve: 'gatsby-source-greenhouse-job-board',
       options: {
-        boardToken: 'greenhouse'
+        boardToken: 'airbnb'
       },
     },
     'gatsby-plugin-offline',
