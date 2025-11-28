@@ -9,7 +9,7 @@
     "gatsby-plugin-manifest": "^5.15.0",
     "gatsby-plugin-offline": "^6.15.0",
     "gatsby-source-filesystem": "^5.15.0",
-    "gatsby-source-greenhouse-job-board": "^1.0.4",
+    "gatsby-source-greenhouse-job-board": "^2.0.0",
     "he": "^1.2.0",
     "html-react-parser": "^4.2.2",
     "isomorphic-dompurify": "^2.33.0",
@@ -34,10 +34,5 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/kevinbarnett/gatsby-greenhouse-starter"
-  },
-  "overrides": {
-    "gatsby-source-greenhouse-job-board": {
-      "gatsby": "$gatsby"
-    }
   }
 }
