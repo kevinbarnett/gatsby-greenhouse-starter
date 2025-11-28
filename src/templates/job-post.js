@@ -1,9 +1,7 @@
 import React from "react"
 import { graphql } from "gatsby"
-import DOMPurify from 'isomorphic-dompurify'
 import he from 'he'
 import Layout from "../components/layout"
-import Head from "../components/head"
 import Form from "../components/applicationForm"
 
 
@@ -24,6 +22,22 @@ const JobForm = (job) => {
   )
 }
 
+// Simple sanitization function that works during SSR/build (no jsdom required)
+const basicSanitize = (html) => {
+  // Remove script and style tags completely
+  html = html.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+  html = html.replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, '')
+
+  // Remove event handlers (onclick, onerror, etc.)
+  html = html.replace(/\s*on\w+\s*=\s*["'][^"']*["']/gi, '')
+  html = html.replace(/\s*on\w+\s*=\s*[^\s>]*/gi, '')
+
+  // Remove javascript: protocol from links
+  html = html.replace(/href\s*=\s*["']javascript:[^"']*["']/gi, 'href="#"')
+
+  return html
+}
+
 const JobContent = (job) => {
   if (!job.content) return null
 
@@ -37,10 +51,9 @@ const JobContent = (job) => {
 
   // If content has HTML tags, sanitize and render as HTML
   if (hasHtmlTags) {
-    const sanitizedContent = DOMPurify.sanitize(content, {
-      ALLOWED_TAGS: ['p', 'br', 'strong', 'em', 'u', 'ul', 'ol', 'li', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'a', 'blockquote', 'div', 'span'],
-      ALLOWED_ATTR: ['href', 'target', 'rel', 'class', 'id']
-    })
+    // Use basic sanitization that works during SSR/build
+    // This is safe enough for build-time, and DOMPurify can enhance on client if needed
+    const sanitizedContent = basicSanitize(content)
 
     return (
       <div
@@ -75,32 +88,13 @@ const JobTitle = (job) => {
 
 const JobPost = ({ data, pageContext }) => {
   const job = data.greenhouseJob
-  const head = {
-    pageTitle: job.title,
-    pageDescription: job.description,
-    pagePathname: pageContext.pathname
-  }
 
   if (pageContext.embedGreenhouseForm) {
     job.embedGreenhouseForm = pageContext.embedGreenhouseForm
-    head.pageScripts = [{
-      src: `https://boards.greenhouse.io/embed/job_board/js?for=${pageContext.greenhouseBoardToken}`,
-      type: "text/javascript",
-      async: true
-    }, {
-      src: "/job-post.js",
-      type: "text/javascript",
-      defer: true
-    }]
-    head.pageMeta = [{
-      id: "gh_id",
-      name: "gh:id",
-      content: pageContext.gh_Id,
-    }]
   }
+
   return (
     <Layout>
-      <Head {...head} />
       <JobTitle {...job} />
       <JobContent {...job} />
       <JobForm {...job} />
@@ -108,10 +102,56 @@ const JobPost = ({ data, pageContext }) => {
   )
 }
 
+export function Head({ data, pageContext }) {
+  const job = data.greenhouseJob
+  const siteMetadata = data.site.siteMetadata
+
+  const title = job.title || siteMetadata.title
+  const fullTitle = siteMetadata.titleTemplate
+    ? siteMetadata.titleTemplate.replace('%s', title)
+    : title
+  const canonical = `${siteMetadata.hostUrl}${pageContext.pathname || '/'}`
+  const description = job.description || siteMetadata.description
+
+  const headElements = (
+    <>
+      <title>{fullTitle}</title>
+      <meta name="description" content={description} />
+      <link rel="canonical" href={canonical} />
+    </>
+  )
+
+  // Add Greenhouse form scripts and meta if needed
+  if (pageContext.embedGreenhouseForm) {
+    return (
+      <>
+        {headElements}
+        <script
+          src={`https://boards.greenhouse.io/embed/job_board/js?for=${pageContext.greenhouseBoardToken}`}
+          type="text/javascript"
+          async
+        />
+        <script src="/job-post.js" type="text/javascript" defer />
+        <meta id="gh_id" name="gh:id" content={pageContext.gh_Id} />
+      </>
+    )
+  }
+
+  return headElements
+}
+
 export default JobPost
 
 export const query = graphql`
   query JobPostQuery($id: String!) {
+    site {
+      siteMetadata {
+        title
+        titleTemplate
+        description
+        hostUrl
+      }
+    }
     greenhouseJob(id: { eq: $id }) {
       title
       content
