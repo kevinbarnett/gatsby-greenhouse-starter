@@ -5,7 +5,7 @@
   "author": "Kevin Barnett <kevinbarnett@gmail.com>",
   "dependencies": {
     "dompurify": "^3.3.0",
-    "gatsby": "^5.15.0",
+    "gatsby": "^5.16.1",
     "gatsby-plugin-manifest": "^5.15.0",
     "gatsby-plugin-offline": "^6.15.0",
     "gatsby-source-filesystem": "^5.15.0",
