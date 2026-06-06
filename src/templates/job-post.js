@@ -132,7 +132,7 @@ export function Head({ data, pageContext }) {
           async
         />
         <script src="/job-post.js" type="text/javascript" defer />
-        <meta id="gh_id" name="gh:id" content={pageContext.gh_Id} />
+        <meta id="gh_id" name="gh:id" content={pageContext.internal_job_id} />
       </>
     )
   }
