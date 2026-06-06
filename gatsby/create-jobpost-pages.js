@@ -29,7 +29,7 @@ const createJobPostPages = ({ actions, graphql }) => {
             edges {
               node {
                 id
-                gh_Id
+                internal_job_id
                 offices {
                   fields {
                     slug
@@ -60,7 +60,7 @@ const createJobPostPages = ({ actions, graphql }) => {
         jobNodes.forEach(({ node }) => {
           const pathname = getPathname(node)
           const id = node.id
-          const gh_Id = node.gh_Id
+          const internal_job_id = node.internal_job_id
           const [department] = node.departments // array always contains just one element
           const test = node.offices ? true : false
 
@@ -76,7 +76,7 @@ const createJobPostPages = ({ actions, graphql }) => {
               greenhouseBoardToken: greenhouseBoardToken,
               pathname: pathname,
               id: id,
-              gh_Id: gh_Id
+              internal_job_id: internal_job_id
             }
           })
         })
