@@ -11,8 +11,11 @@ const JobForm = (job) => {
   if (!job.questions) return null
 
   if (job.embedGreenhouseForm) {
+    // The Greenhouse embed script injects its iframe here, often before React
+    // hydrates. An empty dangerouslySetInnerHTML tells React not to check or
+    // touch the children, which avoids a hydration mismatch.
     return (
-      <div id="grnhse_app"></div>
+      <div id="grnhse_app" dangerouslySetInnerHTML={{ __html: '' }} />
     )
   }
 
