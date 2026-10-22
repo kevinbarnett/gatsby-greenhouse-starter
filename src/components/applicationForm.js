@@ -1,5 +1,4 @@
 import React from "react"
-import parse from 'html-react-parser'
 
 const Form = (job) => {
   const jobQuestions = job.questions
@@ -40,8 +39,8 @@ const FieldLayout = ({question}) => {
           <span className='required'>*</span>
         }
       </label>
-      {Boolean(question.description) &&
-        <div className='description'>{parse(question.description)}</div>
+      {Boolean(question.sanitizedDescription) &&
+        <div className='description' dangerouslySetInnerHTML={{ __html: question.sanitizedDescription }} />
       }
       {question.fields.map((field, index) =>
         <FormField key={index.toString()} field={field} requiredString={question.required} />

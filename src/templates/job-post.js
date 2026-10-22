@@ -1,6 +1,5 @@
 import React from "react"
 import { graphql } from "gatsby"
-import he from 'he'
 import Layout from "../components/layout"
 import Form from "../components/applicationForm"
 
@@ -22,57 +21,15 @@ const JobForm = (job) => {
   )
 }
 
-// Simple sanitization function that works during SSR/build (no jsdom required)
-const basicSanitize = (html) => {
-  // Remove script and style tags completely
-  html = html.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
-  html = html.replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, '')
-
-  // Remove event handlers (onclick, onerror, etc.)
-  html = html.replace(/\s*on\w+\s*=\s*["'][^"']*["']/gi, '')
-  html = html.replace(/\s*on\w+\s*=\s*[^\s>]*/gi, '')
-
-  // Remove javascript: protocol from links
-  html = html.replace(/href\s*=\s*["']javascript:[^"']*["']/gi, 'href="#"')
-
-  return html
-}
-
+// sanitizedContent is produced at build time, see gatsby/sanitize-html.js
 const JobContent = (job) => {
-  if (!job.content) return null
-
-  let content = job.content
-
-  // Decode HTML entities first (e.g., &lt; becomes <)
-  content = he.decode(content)
-
-  // Check if content contains HTML tags (after decoding)
-  const hasHtmlTags = /<[a-z][\s\S]*>/i.test(content)
-
-  // If content has HTML tags, sanitize and render as HTML
-  if (hasHtmlTags) {
-    // Use basic sanitization that works during SSR/build
-    // This is safe enough for build-time, and DOMPurify can enhance on client if needed
-    const sanitizedContent = basicSanitize(content)
-
-    return (
-      <div
-        className="job-content"
-        dangerouslySetInnerHTML={{ __html: sanitizedContent }}
-      />
-    )
-  }
-
-  // If content is plain text, convert newlines to <br> and render
-  const textWithBreaks = content.split('\n').map((line, i) => (
-    <React.Fragment key={i}>
-      {line}
-      {i < content.split('\n').length - 1 && <br />}
-    </React.Fragment>
-  ))
+  if (!job.sanitizedContent) return null
 
   return (
-    <div className="job-content">{textWithBreaks}</div>
+    <div
+      className="job-content"
+      dangerouslySetInnerHTML={{ __html: job.sanitizedContent }}
+    />
   )
 }
 
@@ -154,9 +111,9 @@ export const query = graphql`
     }
     greenhouseJob(id: { eq: $id }) {
       title
-      content
+      sanitizedContent
       questions {
-        description
+        sanitizedDescription
         label
         required
         fields {

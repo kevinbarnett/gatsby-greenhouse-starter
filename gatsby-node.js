@@ -6,6 +6,7 @@ const path = require('path')
 const createJobPostPages = require('./gatsby/create-jobpost-pages')
 const createOfficePages = require('./gatsby/create-office-pages')
 const createDepartmentPages = require('./gatsby/create-department-pages')
+const sanitizeHtml = require('./gatsby/sanitize-html')
 
 
 exports.onCreateNode = ({ node, getNode, actions }) => {
@@ -34,4 +35,22 @@ exports.createPages = ({ actions, graphql }) => {
     createOfficePages({ actions, graphql }),
     createDepartmentPages({ actions, graphql })
   ])
+}
+
+// Sanitize Greenhouse HTML in Node at build time, so pages only ever receive safe HTML
+exports.createResolvers = ({ createResolvers }) => {
+  createResolvers({
+    GreenhouseJob: {
+      sanitizedContent: {
+        type: 'String',
+        resolve: (source) => sanitizeHtml(source.content),
+      },
+    },
+    GreenhouseJobQuestions: {
+      sanitizedDescription: {
+        type: 'String',
+        resolve: (source) => sanitizeHtml(source.description),
+      },
+    },
+  })
 }
