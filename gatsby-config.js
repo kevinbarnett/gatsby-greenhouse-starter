@@ -1,3 +1,7 @@
+// The Greenhouse job board to build the site from. The embedded application
+// form must use the same board, or it can't find the jobs.
+const greenhouseBoardToken = 'airbnb'
+
 module.exports = {
   siteMetadata: {
     title: 'Gatsby + Greenhouse Job Board',
@@ -6,7 +10,7 @@ module.exports = {
     keywords: 'gatsby, greenhouse, jobs, careers',
     hostUrl: 'https://inspiring-hodgkin-1eba1b.netlify.com',
     embedGreenhouseForm: true,
-    greenhouseBoardToken: 'greenhouse'
+    greenhouseBoardToken
   },
   plugins: [
     {
@@ -24,7 +28,7 @@ module.exports = {
     {
       resolve: 'gatsby-source-greenhouse-job-board',
       options: {
-        boardToken: 'airbnb'
+        boardToken: greenhouseBoardToken
       },
     },
     'gatsby-plugin-offline',

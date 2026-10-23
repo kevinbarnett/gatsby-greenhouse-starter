@@ -1,21 +1,22 @@
-(function(){
-
+(function () {
+  // Wait for the Greenhouse embed script, then load this job's application form
   function loadIframe() {
-    var id = document.getElementById('gh_id').getAttribute('content');
-    window.Grnhse.Iframe.load(id);
+    var meta = document.getElementById('gh_id');
+    if (!meta) return;
+    window.Grnhse.Iframe.load(meta.getAttribute('content'));
   }
 
   function whenReady(name, callback) {
     var interval = 10;
-    window.setTimeout(function() {
+    function check() {
       if (window[name]) {
         callback(window[name]);
       } else {
-        window.setTimeout(arguments.callee, interval);
+        window.setTimeout(check, interval);
       }
-    }, interval);
+    }
+    window.setTimeout(check, interval);
   }
 
   whenReady('Grnhse', loadIframe);
-
 })();

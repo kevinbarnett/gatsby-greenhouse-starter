@@ -1,4 +1,5 @@
 const path = require(`path`)
+const getGreenhouseJobId = require(`./greenhouse-job-id`)
 const template = path.resolve(`src/templates/job-post.js`)
 
 
@@ -30,6 +31,8 @@ const createJobPostPages = ({ actions, graphql }) => {
               node {
                 id
                 internal_job_id
+                title
+                absolute_url
                 offices {
                   fields {
                     slug
@@ -60,12 +63,10 @@ const createJobPostPages = ({ actions, graphql }) => {
         jobNodes.forEach(({ node }) => {
           const pathname = getPathname(node)
           const id = node.id
-          const internal_job_id = node.internal_job_id
-          const [department] = node.departments // array always contains just one element
-          const test = node.offices ? true : false
+          const greenhouseJobId = getGreenhouseJobId(node.absolute_url)
 
-          if (!test) {
-            console.log(node)
+          if (embedGreenhouseForm && !greenhouseJobId) {
+            console.warn(`No Greenhouse job ID in ${node.absolute_url}, the application form for "${node.title}" won't load`)
           }
 
           createPage({
@@ -76,7 +77,8 @@ const createJobPostPages = ({ actions, graphql }) => {
               greenhouseBoardToken: greenhouseBoardToken,
               pathname: pathname,
               id: id,
-              internal_job_id: internal_job_id
+              internal_job_id: node.internal_job_id,
+              greenhouseJobId: greenhouseJobId
             }
           })
         })
