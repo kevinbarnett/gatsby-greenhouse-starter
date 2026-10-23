@@ -4,6 +4,7 @@ export const jobQueryFragment = graphql`
   fragment JobQueryFragment on GreenhouseJob {
     id
     title
+    pathname
     absolute_url
     internal_job_id
     updated_at
