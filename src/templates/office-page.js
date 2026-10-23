@@ -32,6 +32,7 @@ export const query = graphql`
       jobs {
         id
         title
+        pathname
         fields {
           slug
         }

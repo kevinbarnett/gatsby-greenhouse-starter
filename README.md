@@ -4,6 +4,9 @@ This project will get you started displaying a list of open jobs, office pages, 
 
 ## Getting Started
 
+You need Node.js 22.23.4 or newer on Node 22, or 24.22.1 or newer on Node 24.
+Node 20 and older are not supported.
+
 Install this starter (assuming [Gatsby](https://github.com/gatsbyjs/gatsby/) is installed and updated) by running from your CLI:
 
 ```sh

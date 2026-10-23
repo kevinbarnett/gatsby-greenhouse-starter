@@ -197,6 +197,7 @@ html {
   box-sizing: inherit;
 }
 body {
+  background-color: #fff;
   color: hsla(0, 0%, 0%, 0.8);
   font-family: georgia, serif;
   font-weight: normal;
@@ -621,4 +622,51 @@ pre tt:after {
   html {
     font-size: 100%;
   }
+}
+.field-layout {
+  margin-bottom: 1.45rem;
+}
+.field-layout > label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 0.45rem;
+}
+.field-layout .required {
+  color: #c00;
+  margin-left: 0.2em;
+}
+.field-layout input[type="text"],
+.field-layout select,
+.field-layout textarea {
+  display: block;
+  width: 100%;
+  padding: 0.4rem 0.5rem;
+  border: 1px solid hsla(0, 0%, 0%, 0.3);
+  border-radius: 3px;
+  font: inherit;
+}
+.field-layout textarea {
+  min-height: 6rem;
+  margin-top: 0.45rem;
+}
+.file-upload-message {
+  font-size: 0.85rem;
+  color: hsla(0, 0%, 0%, 0.6);
+}
+.radios label,
+.checkboxes label {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-bottom: 0.3rem;
+}
+form button[type="submit"] {
+  padding: 0.6rem 1.2rem;
+  border: 0;
+  border-radius: 3px;
+  background: #c44e00;
+  color: #fff;
+  font: inherit;
+  font-weight: bold;
+  cursor: pointer;
 }

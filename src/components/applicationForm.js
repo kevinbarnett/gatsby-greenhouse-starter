@@ -1,5 +1,4 @@
 import React from "react"
-import parse from 'html-react-parser'
 
 const Form = (job) => {
   const jobQuestions = job.questions
@@ -7,7 +6,22 @@ const Form = (job) => {
   const questions = [...jobQuestions, ...locationQuestions]
 
   return (
-    <form name="contact" method="POST" data-netlify="true">
+    // multipart so file fields send the file, not just its name. form-name
+    // tells Netlify which form this is once React has rendered it, and the
+    // bot-field honeypot lets Netlify drop spam that fills in every field.
+    <form
+      name="contact"
+      method="POST"
+      encType="multipart/form-data"
+      data-netlify="true"
+      netlify-honeypot="bot-field"
+    >
+      <input type="hidden" name="form-name" value="contact" />
+      <p hidden>
+        <label>
+          Leave this empty: <input name="bot-field" tabIndex="-1" autoComplete="off" />
+        </label>
+      </p>
       {questions.map((question, index) =>
         <FieldLayout question={question} key={index} />
       )}
@@ -40,8 +54,8 @@ const FieldLayout = ({question}) => {
           <span className='required'>*</span>
         }
       </label>
-      {Boolean(question.description) &&
-        <div className='description'>{parse(question.description)}</div>
+      {Boolean(question.sanitizedDescription) &&
+        <div className='description' dangerouslySetInnerHTML={{ __html: question.sanitizedDescription }} />
       }
       {question.fields.map((field, index) =>
         <FormField key={index.toString()} field={field} requiredString={question.required} />
